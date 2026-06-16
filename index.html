@@ -66,6 +66,7 @@
   </select>
 
   <button onclick="addBug()">Log Bug</button>
+<button onclick="clearBugs()" style="background-color: #555; margin-top: 10px;">Clear All Bugs 🗑️</button>
 
   <div class="bug-list" id="bugList">
     <h2>Logged Bugs</h2>
@@ -97,6 +98,11 @@
       // Clear the form
       document.getElementById('bugTitle').value = '';
       document.getElementById('bugDesc').value = '';
+    }
+
+    function clearBugs() {
+      const bugList = document.getElementById('bugList');
+      bugList.innerHTML = '<h2>Logged Bugs</h2>';
     }
   </script>
 
