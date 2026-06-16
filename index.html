@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bug Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #cc0000;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 14px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #cc0000;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #aa0000;
+    }
+    .bug-list {
+      margin-top: 30px;
+    }
+    .bug-card {
+      background: white;
+      border-left: 5px solid #cc0000;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    .severity-high { border-left-color: #cc0000; }
+    .severity-medium { border-left-color: #ff9900; }
+    .severity-low { border-left-color: #009900; }
+  </style>
+</head>
+<body>
+
+  <h1>🐛 Bug Tracker</h1>
+  <p>Use this form to log bugs you find during testing.</p>
+
+  <label>Bug Title</label>
+  <input type="text" id="bugTitle" placeholder="e.g. Login button not working">
+
+  <label>Description</label>
+  <textarea id="bugDesc" rows="3" placeholder="Describe the bug in detail..."></textarea>
+
+  <label>Severity</label>
+  <select id="bugSeverity">
+    <option value="high">High 🔴</option>
+    <option value="medium">Medium 🟡</option>
+    <option value="low">Low 🟢</option>
+  </select>
+
+  <button onclick="addBug()">Log Bug</button>
+
+  <div class="bug-list" id="bugList">
+    <h2>Logged Bugs</h2>
+  </div>
+
+  <script>
+    function addBug() {
+      const title = document.getElementById('bugTitle').value;
+      const desc = document.getElementById('bugDesc').value;
+      const severity = document.getElementById('bugSeverity').value;
+
+      if (!title) {
+        alert('Please enter a bug title!');
+        return;
+      }
+
+      const bugList = document.getElementById('bugList');
+
+      const card = document.createElement('div');
+      card.className = `bug-card severity-${severity}`;
+      card.innerHTML = `
+        <strong>${title}</strong>
+        <p>${desc}</p>
+        <small>Severity: ${severity.toUpperCase()}</small>
+      `;
+
+      bugList.appendChild(card);
+
+      // Clear the form
+      document.getElementById('bugTitle').value = '';
+      document.getElementById('bugDesc').value = '';
+    }
+  </script>
+
+</body>
+</html>
