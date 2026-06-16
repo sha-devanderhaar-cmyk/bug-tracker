@@ -32,8 +32,23 @@
     button:hover {
       background-color: #aa0000;
     }
+    .clear-btn {
+      background-color: #555;
+      margin-top: 10px;
+    }
+    .clear-btn:hover {
+      background-color: #333;
+    }
+    .bug-counter {
+      background: #cc0000;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 4px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
     .bug-list {
-      margin-top: 30px;
+      margin-top: 20px;
     }
     .bug-card {
       background: white;
@@ -45,6 +60,29 @@
     .severity-high { border-left-color: #cc0000; }
     .severity-medium { border-left-color: #ff9900; }
     .severity-low { border-left-color: #009900; }
+    .bug-card small {
+      color: #777;
+      display: block;
+      margin-top: 6px;
+    }
+    .bug-card select {
+      margin: 8px 0 4px 0;
+      width: auto;
+      padding: 4px 8px;
+    }
+    .delete-btn {
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .delete-btn:hover {
+      background-color: #aa0000;
+    }
   </style>
 </head>
 <body>
@@ -66,13 +104,17 @@
   </select>
 
   <button onclick="addBug()">Log Bug</button>
-<button onclick="clearBugs()" style="background-color: #555; margin-top: 10px;">Clear All Bugs 🗑️</button>
+  <button class="clear-btn" onclick="clearBugs()">Clear All Bugs 🗑️</button>
+
+  <div class="bug-counter" id="bugCounter">🐛 Total Bugs Logged: 0</div>
 
   <div class="bug-list" id="bugList">
     <h2>Logged Bugs</h2>
   </div>
 
   <script>
+    let bugCount = 0;
+
     function addBug() {
       const title = document.getElementById('bugTitle').value;
       const desc = document.getElementById('bugDesc').value;
@@ -83,26 +125,61 @@
         return;
       }
 
+      bugCount++;
+      updateCounter();
+
+      const now = new Date();
+      const timestamp = now.toLocaleString();
+
       const bugList = document.getElementById('bugList');
 
       const card = document.createElement('div');
+      const cardId = `bug-${bugCount}`;
       card.className = `bug-card severity-${severity}`;
+      card.id = cardId;
       card.innerHTML = `
         <strong>${title}</strong>
         <p>${desc}</p>
-        <small>Severity: ${severity.toUpperCase()}</small>
+        <label>Status:</label>
+        <select onchange="updateStatus(this)">
+          <option value="open">🔴 Open</option>
+          <option value="inprogress">🟡 In Progress</option>
+          <option value="fixed">🟢 Fixed</option>
+        </select>
+        <small>Severity: ${severity.toUpperCase()} &nbsp;|&nbsp; Logged: ${timestamp}</small>
+        <br>
+        <button class="delete-btn" onclick="deleteBug('${cardId}')">Delete 🗑️</button>
       `;
 
       bugList.appendChild(card);
 
-      // Clear the form
       document.getElementById('bugTitle').value = '';
       document.getElementById('bugDesc').value = '';
+    }
+
+    function deleteBug(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.remove();
+        bugCount--;
+        updateCounter();
+      }
     }
 
     function clearBugs() {
       const bugList = document.getElementById('bugList');
       bugList.innerHTML = '<h2>Logged Bugs</h2>';
+      bugCount = 0;
+      updateCounter();
+    }
+
+    function updateCounter() {
+      document.getElementById('bugCounter').textContent =
+        `🐛 Total Bugs Logged: ${bugCount}`;
+    }
+
+    function updateStatus(selectEl) {
+      // Status updates automatically via the dropdown — no extra code needed!
     }
   </script>
 
